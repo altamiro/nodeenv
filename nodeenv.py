@@ -1234,20 +1234,25 @@ npm_config_prefix="$NODE_VIRTUAL_ENV"
 export NPM_CONFIG_PREFIX
 export npm_config_prefix
 
-if [ -z "$NODE_VIRTUAL_ENV_DISABLE_PROMPT" ] ; then
-    _OLD_NODE_VIRTUAL_PS1="$PS1"
-    if [ "x__NODE_VIRTUAL_PROMPT__" != x ] ; then
-        PS1="__NODE_VIRTUAL_PROMPT__$PS1"
-    else
-    if [ "`basename \"$NODE_VIRTUAL_ENV\"`" = "__" ] ; then
-        # special case for Aspen magic directories
-        # see http://www.zetadev.com/software/aspen/
-        PS1="[`basename \`dirname \"$NODE_VIRTUAL_ENV\"\``] $PS1"
-    else
-        PS1="(`basename \"$NODE_VIRTUAL_ENV\"`)$PS1"
-    fi
-    fi
+if [ -n "$ZSH" ] ; then
+    PS1="$PS1"
     export PS1
+else
+    if [ -z "$NODE_VIRTUAL_ENV_DISABLE_PROMPT" ] ; then
+        _OLD_NODE_VIRTUAL_PS1="$PS1"
+        if [ "x__NODE_VIRTUAL_PROMPT__" != x ] ; then
+            PS1="__NODE_VIRTUAL_PROMPT__$PS1"
+        else
+        if [ "`basename \"$NODE_VIRTUAL_ENV\"`" = "__" ] ; then
+            # special case for Aspen magic directories
+            # see http://www.zetadev.com/software/aspen/
+            PS1="[`basename \`dirname \"$NODE_VIRTUAL_ENV\"\``] $PS1"
+        else
+            PS1="(`basename \"$NODE_VIRTUAL_ENV\"`)$PS1"
+        fi
+        fi
+        export PS1
+    fi
 fi
 
 # This should detect bash and zsh, which have a hash command that must
