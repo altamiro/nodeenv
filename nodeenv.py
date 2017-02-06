@@ -39,11 +39,12 @@ except ImportError:  # pragma: no cover (py3 only)
 
 from pkg_resources import parse_version
 
-nodeenv_version = '1.1.2'
+nodeenv_version = '1.1.3'
 
 join = os.path.join
 abspath = os.path.abspath
 src_domain = "nodejs.org"
+user_directory = ".nodeenvs"
 
 is_PY3 = sys.version_info[0] == 3
 if is_PY3:
@@ -1000,14 +1001,20 @@ def main():
     if not opt.node or opt.node.lower() == "latest":
         opt.node = get_last_stable_node_version()
 
+    home_env_dir = to_utf8(abspath(join(os.getenv('HOME'), user_directory)))
+    if not os.path.exists(home_env_dir):
+        mkdir(home_env_dir)
+
     if opt.list:
         print_node_versions()
     elif opt.update:
         env_dir = get_env_dir(opt, args)
-        install_packages(env_dir, opt)
+        nodeenv = to_utf8(abspath(join(home_env_dir, env_dir)))
+        install_packages(nodeenv, opt)
     else:
         env_dir = get_env_dir(opt, args)
-        create_environment(env_dir, opt)
+        nodeenv = to_utf8(abspath(join(home_env_dir, env_dir)))
+        create_environment(nodeenv, opt)
 
 
 # ---------------------------------------------------------
